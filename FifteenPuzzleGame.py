@@ -1,3 +1,5 @@
+from collections import deque
+
 dane = []
 positiveDane = []
 
@@ -10,53 +12,57 @@ with open('wzorzec.txt', 'r') as file:
     for line in file:
         positiveRow = line.strip().split(' ')
         positiveDane.append(list(map(int, positiveRow)))
-def moveFunction(move):
+def moveFunction(move, board):
     zero_positions = []
-    for i, row in enumerate(dane):
+    for i, row in enumerate(board):
         for j, number in enumerate(row):
             if number == 0:
                 zero_positions.append((i, j))
     for position in zero_positions:
         if(move == "L"):
             if(position[1] != 0):
-                change = dane[position[0]][position[1]-1]
-                dane[position[0]][position[1]-1] = dane[position[0]][position[1]]
-                dane[position[0]][position[1]] = change
+                change = board[position[0]][position[1]-1]
+                board[position[0]][position[1]-1] = board[position[0]][position[1]]
+                board[position[0]][position[1]] = change
         if(move == "R"):
             if(position[1] != 3):
-                change = dane[position[0]][position[1] + 1]
-                dane[position[0]][position[1] + 1] = dane[position[0]][position[1]]
-                dane[position[0]][position[1]] = change
+                change = board[position[0]][position[1] + 1]
+                board[position[0]][position[1] + 1] = board[position[0]][position[1]]
+                board[position[0]][position[1]] = change
         if(move == "U"):
             if(position[0] != 0):
-                change = dane[position[0] - 1][position[1]]
-                dane[position[0] - 1][position[1]] = dane[position[0]][position[1]]
-                dane[position[0]][position[1]] = change
+                change = board[position[0] - 1][position[1]]
+                board[position[0] - 1][position[1]] = board[position[0]][position[1]]
+                board[position[0]][position[1]] = change
         if(move == "D"):
             if(position[0] != 3):
-                change = dane[position[0] + 1][position[1]]
-                dane[position[0] + 1][position[1]] = dane[position[0]][position[1]]
-                dane[position[0]][position[1]] = change
+                change = board[position[0] + 1][position[1]]
+                board[position[0] + 1][position[1]] = board[position[0]][position[1]]
+                board[position[0]][position[1]] = change
     zero_positions.clear()
-    for i, row in enumerate(dane):
+    for i, row in enumerate(board):
         for j, number in enumerate(row):
             if number == 0:
                 zero_positions.append((i, j))
 
-    print(zero_positions[0])
+def checkingBoard(board, positiveBoard):
+    for i in range(4):
+        for j in range(4):
+            if(board[i][j] != positiveBoard[i][j]):
+                return False
+    return True
 
-
-def manhattan_distance():
+def manhattan_distance(board, positiveBoard):
     polesDictionary = []
     for i in range(0, 16):
         position = []
         positivePosition = []
 
-        for j, row in enumerate(dane):
+        for j, row in enumerate(board):
             for k, number in enumerate(row):
                 if number == i:
                     position.append((j, k))
-        for j, positiveRow in enumerate(positiveDane):
+        for j, positiveRow in enumerate(positiveBoard):
             for k, number in enumerate(positiveRow):
                 if number == i:
                     positivePosition.append((j, k))
@@ -68,7 +74,22 @@ def manhattan_distance():
 
     return polesDictionary
 
+def bfs_algorithm(start_board, target_board):
+    queue = deque()
+    queue.append(start_board)
+    testedPositions = set()
+    testedPositions.add(tuple(map(tuple, start_board)))
+    for i in range(30):
+        current_board = queue.popleft()
+        if checkingBoard(current_board, target_board):
+            return current_board
 
-polesDictionary = manhattan_distance()
-print(polesDictionary)
-print(dane)
+        for move in ["L", "R", "U", "D"]:
+            new_board = [row[:] for row in current_board]
+            moveFunction(move, new_board)
+            if tuple(map(tuple, new_board)) not in testedPositions:
+                queue.append(new_board)
+                testedPositions.add(tuple(map(tuple, new_board)))
+                print(new_board)
+
+bfs_algorithm(dane, positiveDane)
