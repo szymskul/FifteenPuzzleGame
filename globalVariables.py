@@ -1,8 +1,10 @@
 sizeOfBoard = []
 dane = []
+target_board = []
 path = "X"
 reached_depth = 0
-depth = 2
+depth = 10
 proceed = True
 queue = []
 all_path = "X"
+order = "XXXX"

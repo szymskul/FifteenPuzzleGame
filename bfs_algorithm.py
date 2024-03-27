@@ -1,7 +1,7 @@
 from collections import deque
 import moveFunctions
 
-def bfs_algorithm(start_board, target_board):
+def bfs_algorithm(start_board, target_board, order):
     queue = deque()
     queue.append(start_board)
     testedPositions = set()
@@ -11,7 +11,7 @@ def bfs_algorithm(start_board, target_board):
         if moveFunctions.checkingBoard(current_board, target_board):
             return current_board
 
-        for move in ["R", "D", "U", "L"]:
+        for move in order:
             new_board = [row[:] for row in current_board]
             if(moveFunctions.checkMovePossibility(move, new_board)):
                 moveFunctions.moveFunction(move, new_board)
