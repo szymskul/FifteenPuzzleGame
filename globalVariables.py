@@ -1,10 +1,13 @@
 sizeOfBoard = []
 dane = []
 target_board = []
-path = "X"
+path = ""
 reached_depth = 0
-depth = 10
+depth = 6
 proceed = True
 queue = []
 all_path = "X"
-order = "XXXX"
+order = ""
+proceededPositions = 0
+testedPositions = 0
+spentTime = 0.0

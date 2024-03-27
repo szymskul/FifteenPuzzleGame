@@ -1,15 +1,19 @@
 from moveFunctions import checkMovePossibility
 from moveFunctions import moveFunction
 import globalVariables
-
+testedPositions = set()
+proceededPositions = 0
 def dfs_algorithm(current_board, last_choose, current_depth, final_board):
      if len(globalVariables.path) > globalVariables.reached_depth:
          globalVariables.reached_depth = len(globalVariables.path)
+     if tuple(map(tuple, current_board)) not in testedPositions:
+        testedPositions.add(tuple(map(tuple, current_board)))
+     if(current_depth > globalVariables.reached_depth):
+         globalVariables.reached_depth = current_depth
      if current_board == final_board:
          globalVariables.proceed = False
-         print(globalVariables.path)
-         print(current_board)
-         print(globalVariables.path)
+         globalVariables.testedPositions = len(testedPositions)
+         globalVariables.proceededPositions = len(globalVariables.all_path) + 1
          return current_board
      elif globalVariables.proceed:
          if current_depth >= globalVariables.depth:
