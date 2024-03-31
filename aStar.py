@@ -1,18 +1,25 @@
+import globalVariables
 from moveFunctions import moveFunction
+from moveFunctions import checkMovePossibility
+
+def manhattan_distance_help_function(position, positivePosition):
+    x = abs(position[0] - positivePosition[0])
+    y = abs(position[1] - positivePosition[1])
+    return abs(x) + abs(y)
 def humming_metric(board, positiveBoard):
     humming = 0
-    for i in range(4):
-        for j in range(4):
+    for i in range(len(board)):
+        for j in range(len(board)):
             if(board[i][j] != 0):
                 if(board[i][j] != positiveBoard[i][j]):
                     humming += 1
     return humming
 def manhattan_distance(board, positiveBoard):
     polesDictionary = []
+    position = []
+    positivePosition = []
     suma = 0
     for i in range(0, 15):
-        position = []
-        positivePosition = []
 
         for j, row in enumerate(board):
             for k, number in enumerate(row):
@@ -23,34 +30,44 @@ def manhattan_distance(board, positiveBoard):
                 if number == i+1:
                     positivePosition.append((j, k))
 
-        for position1 in position:
-            for position2 in positivePosition:
-                distance = abs((position1[0] - position2[0]) + (position1[1] - position2[1]))
-                polesDictionary.append(distance)
+    for i in range(0, len(position)):
+            print(i)
+            distance = manhattan_distance_help_function(position[i], positivePosition[i])
+            polesDictionary.append(distance)
+    print(polesDictionary)
     for i in range(0, 15):
         suma += polesDictionary[i]
     return suma
 
 
 def aStar(start_board, target_board, type):
+    positionValue = []
     amountOfMoves = 0
     testedPositions = set()
     current_board = start_board
-    while current_board != target_board: # tu bedzie petla ale usuwam ja na czas testow
-        testedPositions.add(tuple(map(tuple, start_board)))
+    while current_board != target_board:
+        if tuple(map(tuple, current_board)) not in testedPositions:
+            testedPositions.add(tuple(map(tuple, current_board)))
         if(type == "mnh"):
-            leftPosition = manhattan_distance(moveFunction("L", current_board), target_board)
-            rightPosition = manhattan_distance(moveFunction("R", current_board), target_board)
-            downPosition = manhattan_distance(moveFunction("D", current_board), target_board)
-            upPosition = manhattan_distance(moveFunction("U", current_board), target_board)
+            for move in "UDRL":
+                if(checkMovePossibility(move, current_board)):
+                    temp_board = [row[:] for row in current_board]
+                    score = manhattan_distance(moveFunction(move, temp_board), target_board)
+                    globalVariables.all_path += move
+                    positionValue.append((score + amountOfMoves, move))
         else:
-            leftPosition = humming_metric(moveFunction("L", current_board), target_board)
-            rightPosition = humming_metric(moveFunction("R", current_board), target_board)
-            downPosition = humming_metric(moveFunction("D", current_board), target_board)
-            upPosition = humming_metric(moveFunction("U", current_board), target_board)
-
-        positionValue = [(leftPosition + amountOfMoves,"L"),(rightPosition + amountOfMoves, "R"),(downPosition + amountOfMoves, "D"),(upPosition + amountOfMoves, "U")]
+            for move in "UDRL":
+                if (checkMovePossibility(move, current_board)):
+                    temp_board = [row[:] for row in current_board]
+                    score = humming_metric(moveFunction(move, temp_board), target_board)
+                    globalVariables.all_path += move
+                    positionValue.append((score + amountOfMoves, move))
         min_positionValue = min(positionValue)
-        print(current_board)
-        moveFunction(min_positionValue[1],current_board)
-    return
+        amountOfMoves += 1
+        current_board = moveFunction(min_positionValue[1],current_board)
+        globalVariables.path += min_positionValue[1]
+        positionValue.clear()
+    globalVariables.testedPositions = len(testedPositions)
+    globalVariables.proceededPositions = len(globalVariables.all_path)
+    globalVariables.reached_depth = len(globalVariables.path)
+    return current_board

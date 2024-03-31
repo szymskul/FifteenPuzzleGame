@@ -25,4 +25,4 @@ def mainFunction(algorithmType, order, fileToRead, fileToWriteSolution, fileToWr
     ioFunctions.writeSolutionFile(fileToWriteSolution)
     ioFunctions.writeDetailsOfSolutionFile(fileToWriteDetailsOfSolution)
 
-mainFunction("elo", "RDUL", "data.txt" , "solution.txt", "detailsOfSolution.txt")
+mainFunction("aStar", "mnh", "data.txt" , "solution.txt", "detailsOfSolution.txt")
