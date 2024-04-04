@@ -5,7 +5,6 @@ def solveScript(algorithmType, order):
     directoryToSolve = "toSolve"
     directoryToSolved = "Solved"
     directoryToStats = "solvedStats"
-    os.makedirs("toSolve", exist_ok=True)
     os.makedirs("Solved", exist_ok=True)
     os.makedirs("solvedStats", exist_ok=True)
     for fileName in os.listdir(directoryToSolve):
