@@ -1,6 +1,5 @@
 import os
-import sys
-
+import mainFifteenPuzzleGame
 def solveScript(algorithmType, order):
     directoryToSolve = "toSolve"
     directoryToSolved = "Solved"
@@ -8,14 +7,11 @@ def solveScript(algorithmType, order):
     os.makedirs("Solved", exist_ok=True)
     os.makedirs("solvedStats", exist_ok=True)
     for fileName in os.listdir(directoryToSolve):
-        input_filename = fileName
         index = fileName.find('.txt')
+        input_filename = os.path.join(directoryToSolve, fileName)
         output_filename = os.path.join(directoryToSolved,f'{fileName[:index]}_{algorithmType}_{order}_sol.txt')
         additional_output_filename = os.path.join(directoryToStats, f'{fileName[:index]}_{algorithmType}_{order}_stats.txt')
-        sys.argv = [
-            'mainFifteenPuzzleGame.py', algorithmType, order, input_filename, output_filename, additional_output_filename
-        ]
-        exec(open('mainFifteenPuzzleGame.py').read())
+        mainFifteenPuzzleGame.mainFunction(algorithmType, order, input_filename, output_filename, additional_output_filename)
 
 def solveDfs():
     search_orders = ['RDUL', 'RDLU', 'DRUL', 'DRLU', 'LUDR', 'LURD', 'ULDR', 'ULRD']
@@ -35,4 +31,3 @@ def aStar():
 if __name__ == '__main__':
     solveDfs()
     solveBfs()
-    aStar()
