@@ -11,7 +11,7 @@ def resetAllValues():
     globalVariables.target_board = []
     globalVariables.path = ""
     globalVariables.reached_depth = 0
-    globalVariables.depth = 6
+    globalVariables.depth = 20
     globalVariables.proceed = True
     globalVariables.queue = []
     globalVariables.all_path = ""

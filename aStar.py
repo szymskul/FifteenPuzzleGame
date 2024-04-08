@@ -1,3 +1,5 @@
+from queue import PriorityQueue
+
 import globalVariables
 from moveFunctions import moveFunction
 from moveFunctions import checkMovePossibility
@@ -29,9 +31,9 @@ def manhattan_distance(board, positiveBoard):
             for k, number in enumerate(positiveRow):
                 if number == i+1:
                     positivePosition.append((j, k))
-
+    print(position)
+    print(positivePosition)
     for i in range(0, len(position)):
-            print(i)
             distance = manhattan_distance_help_function(position[i], positivePosition[i])
             polesDictionary.append(distance)
     print(polesDictionary)
@@ -39,35 +41,39 @@ def manhattan_distance(board, positiveBoard):
         suma += polesDictionary[i]
     return suma
 
-
 def aStar(start_board, target_board, type):
-    positionValue = []
-    amountOfMoves = 0
+    stats = 0
     testedPositions = set()
-    current_board = start_board
-    while current_board != target_board:
-        if tuple(map(tuple, current_board)) not in testedPositions:
-            testedPositions.add(tuple(map(tuple, current_board)))
-        if(type == "mnh"):
-            for move in "UDRL":
-                if(checkMovePossibility(move, current_board)):
-                    temp_board = [row[:] for row in current_board]
-                    score = manhattan_distance(moveFunction(move, temp_board), target_board)
-                    globalVariables.all_path += move
-                    positionValue.append((score + amountOfMoves, move))
-        else:
-            for move in "UDRL":
-                if (checkMovePossibility(move, current_board)):
-                    temp_board = [row[:] for row in current_board]
-                    score = humming_metric(moveFunction(move, temp_board), target_board)
-                    globalVariables.all_path += move
-                    positionValue.append((score + amountOfMoves, move))
-        min_positionValue = min(positionValue)
-        amountOfMoves += 1
-        current_board = moveFunction(min_positionValue[1],current_board)
-        globalVariables.path += min_positionValue[1]
-        positionValue.clear()
-    globalVariables.testedPositions = len(testedPositions)
-    globalVariables.proceededPositions = len(globalVariables.all_path)
-    globalVariables.reached_depth = len(globalVariables.path)
-    return current_board
+    queueAstar = PriorityQueue()
+    queueAstar.put((0, [start_board, "", 0]))
+    max_depth = 0
+    while not queueAstar.empty():
+        current_board, path, moves_count = queueAstar.get()[1]
+        if current_board == target_board:
+            globalVariables.proceededPositions = len(testedPositions)
+            while not queueAstar.empty():
+                new = queueAstar.get()
+                stats += 1
+            globalVariables.testedPositions = len(testedPositions) + stats
+            globalVariables.path = path
+            print(current_board)
+            print(path)
+            return current_board
+        testedPositions.add(tuple(map(tuple, current_board)))
+        for move in "UDRL":
+            if checkMovePossibility(move, current_board):
+                temp_board = [row[:] for row in current_board]
+                moveFunction(move, temp_board)
+                if temp_board in tuple(map(tuple, testedPositions)):
+                    continue
+                moves_count_temp = moves_count + 1
+                if type == "mnh":
+                    cost = manhattan_distance(current_board, target_board) + moves_count_temp
+                elif type == "hamm":
+                    cost = humming_metric(current_board, target_board) + moves_count_temp
+                else:
+                    return False
+                queueAstar.put((cost, [temp_board, path + move, moves_count_temp]))
+                globalVariables.reached_depth = max(max_depth, len(path))
+    globalVariables.path = "XX"
+    return -1

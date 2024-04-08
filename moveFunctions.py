@@ -45,8 +45,8 @@ def moveFunction(move, board):
     return board
 
 def checkingBoard(board, positiveBoard):
-    for i in range(4):
-        for j in range(4):
+    for i in range(len(board)):
+        for j in range(len(board)):
             if(board[i][j] != positiveBoard[i][j]):
                 return False
     return True

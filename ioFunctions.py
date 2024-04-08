@@ -21,9 +21,12 @@ def readFile(fileName):
 
 def writeSolutionFile(fileName):
     with open(fileName, 'w') as file:
-        file.write(str(len(globalVariables.path)))
-        file.write('\n')
-        file.write(globalVariables.path)
+        if(globalVariables.path == "XX"):
+            file.write("-1")
+        else:
+            file.write(str(len(globalVariables.path)))
+            file.write('\n')
+            file.write(globalVariables.path)
 
 def writeDetailsOfSolutionFile(fileName):
     with open(fileName, 'w') as file:
