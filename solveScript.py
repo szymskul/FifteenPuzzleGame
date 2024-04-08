@@ -29,4 +29,4 @@ def aStar():
         solveScript("astr", search_heuristic)
 
 if __name__ == '__main__':
-    aStar()
+    solveDfs()
