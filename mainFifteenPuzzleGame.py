@@ -23,7 +23,6 @@ def resetAllValues():
 def mainFunction(algorithmType, order, fileToRead, fileToWriteSolution, fileToWriteDetailsOfSolution):
     resetAllValues()
     ioFunctions.readFile(fileToRead)
-    start_time = time.time()
     if algorithmType == "bfs":
         bfs_algorithm(globalVariables.dane, globalVariables.target_board, order)
     elif algorithmType == "dfs":
@@ -31,10 +30,8 @@ def mainFunction(algorithmType, order, fileToRead, fileToWriteSolution, fileToWr
         dfs_algorithm(globalVariables.dane, "X", 1, globalVariables.target_board)
     elif algorithmType == "astr":
         aStar(globalVariables.dane, globalVariables.target_board, order)
-    end_time = time.time()
-
-    globalVariables.spentTime = float((end_time - start_time) * 1000)
 
     ioFunctions.writeSolutionFile(fileToWriteSolution)
     ioFunctions.writeDetailsOfSolutionFile(fileToWriteDetailsOfSolution)
 
+mainFunction("dfs","DRUL","tested","solver","solver1")
