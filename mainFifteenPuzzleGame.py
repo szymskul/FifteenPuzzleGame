@@ -3,6 +3,7 @@ import globalVariables
 from bfs_algorithm import bfs_algorithm
 from dfs_algorithm import dfs_algorithm
 from aStar import aStar
+import sys
 
 def resetAllValues():
     globalVariables.sizeOfBoard = []
@@ -33,3 +34,11 @@ def mainFunction(algorithmType, order, fileToRead, fileToWriteSolution, fileToWr
 
     ioFunctions.writeSolutionFile(fileToWriteSolution)
     ioFunctions.writeDetailsOfSolutionFile(fileToWriteDetailsOfSolution)
+
+if __name__ == "__main__":
+    algorithmType = sys.argv[1]
+    order = sys.argv[2]
+    fileToRead = sys.argv[3]
+    fileToWriteSolution = sys.argv[4]
+    fileToWriteDetailsOfSolution = sys.argv[5]
+    mainFunction(algorithmType,order,fileToRead,fileToWriteSolution,fileToWriteDetailsOfSolution)
