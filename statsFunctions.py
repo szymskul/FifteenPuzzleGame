@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import os
 
+import numpy as np
 def createPlotOfStatsOverall(numberOfLineToAdd):
     numberOfCountsDfs = [0,0,0,0,0,0,0]
     numberOfCountsAstar = [0, 0, 0, 0, 0, 0, 0]
@@ -46,7 +47,7 @@ def createPlotOfStatsAstar(numberOfLineToAdd):
     numberOfCountsManh = [0,0,0,0,0,0,0]
     countHamm = [0,0,0,0,0,0,0]
     countManh = [0,0,0,0,0,0,0]
-    directoryToStats = "siuuu"
+    directoryToStats = "solvedStats"
     for fileName in os.listdir(directoryToStats):
         filePath = os.path.join(directoryToStats, fileName)
         with open(filePath, 'r') as file:
@@ -54,11 +55,10 @@ def createPlotOfStatsAstar(numberOfLineToAdd):
             parts = fileName.split('_')
             if numberOfLineToAdd <= len(lines):
                 if(parts[4] == "hamm"):
-                    countHamm[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
-                    print(int(lines[numberOfLineToAdd]))
+                    countHamm[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsHamm[int(parts[1]) - 1] += 1
                 elif(parts[4] == "mnh"):
-                    countManh[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countManh[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsManh[int(parts[1]) - 1] += 1
             else:
                 return "Podana linia nie istnieje w pliku."
@@ -71,6 +71,8 @@ def createPlotOfStatsAstar(numberOfLineToAdd):
         dzielnik = numberOfCountsManh[i]
         if(dzielnik != 0):
             countManh[i] = zmienna / dzielnik
+    print(countManh)
+    print(countHamm)
     return countManh, countHamm
 
 def createPlotOfStatsBfsDfs(numberOfLineToAdd):
@@ -90,7 +92,7 @@ def createPlotOfStatsBfsDfs(numberOfLineToAdd):
     countLURD = [0,0,0,0,0,0,0]
     countULDR = [0,0,0,0,0,0,0]
     countULRD = [0,0,0,0,0,0,0]
-    directoryToStats = "siuuu"
+    directoryToStats = "solvedStats"
     for fileName in os.listdir(directoryToStats):
         filePath = os.path.join(directoryToStats, fileName)
         with open(filePath, 'r') as file:
@@ -98,28 +100,28 @@ def createPlotOfStatsBfsDfs(numberOfLineToAdd):
             parts = fileName.split('_')
             if numberOfLineToAdd <= len(lines):
                 if(parts[4] == "RDUL"):
-                    countRDUL[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countRDUL[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsRDUL[int(parts[1]) - 1] += 1
                 elif(parts[4] == "RDLU"):
-                    countRDLU[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countRDLU[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsRDLU[int(parts[1]) - 1] += 1
                 elif(parts[4] == "DRUL"):
-                    countDRUL[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countDRUL[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsDRUL[int(parts[1]) - 1] += 1
                 elif (parts[4] == "DRLU"):
-                    countDRLU[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countDRLU[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsDRLU[int(parts[1]) - 1] += 1
                 elif (parts[4] == "LUDR"):
-                    countLUDR[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countLUDR[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsLUDR[int(parts[1]) - 1] += 1
                 elif (parts[4] == "LURD"):
-                    countLURD[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countLURD[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsLURD[int(parts[1]) - 1] += 1
                 elif (parts[4] == "ULDR"):
-                    countULDR[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countULDR[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsULDR[int(parts[1]) - 1] += 1
                 elif (parts[4] == "ULRD"):
-                    countULRD[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countULRD[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsULRD[int(parts[1]) - 1] += 1
             else:
                 return "Podana linia nie istnieje w pliku."
@@ -182,35 +184,71 @@ def genPlotsOverall(lista1, lista2, lista3):
     plt.show()
 def genPlotsAstar(lista1, lista2):
     plt.figure(figsize=(10, 6))
-    bar_width = 0.25
-    indeksy = range(len(lista1))
-    plt.bar(indeksy, lista1, bar_width, label='Lista 1', color='blue')
-    plt.bar([i + bar_width for i in indeksy], lista2, bar_width, label='Lista 2', color='green')
-    plt.xlabel('Indeks')
-    plt.ylabel('Wartość')
-    plt.title('Wykres wartości dla trzech list')
-    plt.xticks([i + bar_width/2 for i in indeksy], [i + 1 for i in indeksy])
+    bar_width = 0.35
+    indeksy = range(1, len(lista1) + 1)
+    plt.bar(indeksy, lista1, bar_width, label='Manhattan', color='blue')
+    plt.bar([i + bar_width for i in indeksy], lista2, bar_width, label='Hamming', color='green')
+    plt.title("A*",fontsize=14)
+    plt.xticks([i + bar_width/2 for i in indeksy], indeksy)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     plt.legend()
     plt.grid(False)
     plt.show()
 
-def genPlotsAstar(*lists):
+def genPlotsBfs(*lists, title):
     plt.figure(figsize=(10, 6))
     bar_width = 0.1
     num_lists = len(lists)
     indeksy = range(len(lists[0]))
     colors = ['blue', 'green', 'red', 'orange', 'purple', 'yellow', 'cyan', 'magenta']
-
+    label = ['RDUL', 'RDLU', 'DRUL', 'DRLU', 'LUDR', 'LURD', 'ULDR', 'ULRD']
     for i, lista in enumerate(lists):
-        plt.bar([j + i * bar_width for j in indeksy], lista, bar_width, label=f'Lista {i+1}', color=colors[i])
-
-    plt.xlabel('Indeks')
-    plt.ylabel('Wartość')
-    plt.title('Wykres wartości dla ośmiu list')
+        plt.bar([j + i * bar_width for j in indeksy], lista, bar_width, label=label[i], color=colors[i])
+    plt.title('BFS', fontsize=14)
+    plt.xlabel('Głębokość', fontsize=12)
+    if title == 0:
+        plt.ylabel('Średnia długość drogi rozwiązania', fontsize=12)
+    if title == 1:
+        plt.yticks(np.linspace(0, 1500, num=6), fontsize=12)  # Generuje równomierne wartości od 10 do 1000
+        plt.ylim(0, 1500)
+        plt.ylabel('Średnia liczba stanów odwiedzonych', fontsize=12)
+    if title == 2:
+        plt.yticks(np.linspace(0, 500, num=6), fontsize=12)  # Generuje równomierne wartości od 10 do 1000
+        plt.ylim(0, 500)
+        plt.ylabel('Średnia liczba stanów przetworzonych', fontsize=12)
+    if title == 3:
+        plt.ylabel('Średnia maksymalna głębokość rekursji', fontsize=12)
+    if title == 4:
+        plt.yticks([0,8], fontsize=12)
+        plt.ylabel('Średni czas procesu obliczeniowego (ms)',fontsize=12)
     plt.xticks([j + (num_lists - 1) * bar_width / 2 for j in indeksy], [j + 1 for j in indeksy])
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
     plt.legend()
     plt.grid(False)
     plt.show()
 
 countManh, countHamm = createPlotOfStatsAstar(0)
 genPlotsAstar(countManh, countHamm)
+countManh, countHamm = createPlotOfStatsAstar(1)
+genPlotsAstar(countManh, countHamm)
+countManh, countHamm = createPlotOfStatsAstar(2)
+genPlotsAstar(countManh, countHamm)
+countManh, countHamm = createPlotOfStatsAstar(3)
+genPlotsAstar(countManh, countHamm)
+countManh, countHamm = createPlotOfStatsAstar(4)
+genPlotsAstar(countManh, countHamm)
+
+countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD = createPlotOfStatsBfsDfs(0)
+genPlotsBfs(countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD,title = 0)
+countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD = createPlotOfStatsBfsDfs(1)
+genPlotsBfs(countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD,title = 1)
+countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD = createPlotOfStatsBfsDfs(2)
+genPlotsBfs(countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD,title = 2)
+countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD = createPlotOfStatsBfsDfs(3)
+genPlotsBfs(countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD,title = 3)
+countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD = createPlotOfStatsBfsDfs(4)
+genPlotsBfs(countRDUL, countRDLU, countDRUL, countDRLU, countLUDR, countLURD, countULDR, countULRD,title = 4)
+
+

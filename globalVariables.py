@@ -6,7 +6,6 @@ reached_depth = 0
 max_depth = 20
 proceed = True
 queue = []
-all_path = ""
 order = ""
 proceededPositions = 0
 testedPositions = 0

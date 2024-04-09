@@ -1,7 +1,7 @@
 import os
 import mainFifteenPuzzleGame
 def solveScript(algorithmType, order):
-    directoryToSolve = "toSolve1"
+    directoryToSolve = "toSolve"
     directoryToSolved = "Solved"
     directoryToStats = "solvedStats"
     os.makedirs("Solved", exist_ok=True)
@@ -29,4 +29,4 @@ def aStar():
         solveScript("astr", search_heuristic)
 
 if __name__ == '__main__':
-    solveDfs()
+    solveBfs()

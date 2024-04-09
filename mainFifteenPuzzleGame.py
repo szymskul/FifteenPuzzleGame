@@ -1,4 +1,3 @@
-import time
 import ioFunctions
 import globalVariables
 from bfs_algorithm import bfs_algorithm
@@ -14,7 +13,6 @@ def resetAllValues():
     globalVariables.depth = 20
     globalVariables.proceed = True
     globalVariables.queue = []
-    globalVariables.all_path = ""
     globalVariables.order = ""
     globalVariables.proceededPositions = 0
     globalVariables.testedPositions = 0
@@ -30,8 +28,8 @@ def mainFunction(algorithmType, order, fileToRead, fileToWriteSolution, fileToWr
         dfs_algorithm(globalVariables.dane, "X", 1, globalVariables.target_board)
     elif algorithmType == "astr":
         aStar(globalVariables.dane, globalVariables.target_board, order)
+    if globalVariables.proceed == True:
+        globalVariables.path = "XX"
 
     ioFunctions.writeSolutionFile(fileToWriteSolution)
     ioFunctions.writeDetailsOfSolutionFile(fileToWriteDetailsOfSolution)
-
-mainFunction("dfs","DRUL","tested","solver","solver1")

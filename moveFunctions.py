@@ -43,10 +43,3 @@ def moveFunction(move, board):
                 board[position[0] + 1][position[1]] = board[position[0]][position[1]]
                 board[position[0]][position[1]] = change
     return board
-
-def checkingBoard(board, positiveBoard):
-    for i in range(len(board)):
-        for j in range(len(board)):
-            if(board[i][j] != positiveBoard[i][j]):
-                return False
-    return True

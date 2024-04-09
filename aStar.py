@@ -1,3 +1,4 @@
+import time
 from queue import PriorityQueue
 
 import globalVariables
@@ -42,26 +43,24 @@ def manhattan_distance(board, positiveBoard):
     return suma
 
 def aStar(start_board, target_board, type):
-    stats = 0
+    start_time = time.time()
     testedPositions = set()
     queueAstar = PriorityQueue()
     queueAstar.put((0, [start_board, "", 0]))
     max_depth = 0
     while not queueAstar.empty():
         current_board, path, moves_count = queueAstar.get()[1]
+        globalVariables.proceededPositions += 1
         if current_board == target_board:
-            globalVariables.proceededPositions = len(testedPositions)
-            while not queueAstar.empty():
-                new = queueAstar.get()
-                stats += 1
-            globalVariables.testedPositions = len(testedPositions) + stats
             globalVariables.path = path
-            print(current_board)
-            print(path)
+            globalVariables.proceed = False
+            end_time = time.time()
+            globalVariables.spentTime = float((end_time - start_time) * 1000)
             return current_board
         testedPositions.add(tuple(map(tuple, current_board)))
         for move in "UDRL":
             if checkMovePossibility(move, current_board):
+                globalVariables.testedPositions += 1
                 temp_board = [row[:] for row in current_board]
                 moveFunction(move, temp_board)
                 if temp_board in tuple(map(tuple, testedPositions)):
@@ -75,5 +74,3 @@ def aStar(start_board, target_board, type):
                     return False
                 queueAstar.put((cost, [temp_board, path + move, moves_count_temp]))
                 globalVariables.reached_depth = max(max_depth, len(path))
-    globalVariables.path = "XX"
-    return -1
