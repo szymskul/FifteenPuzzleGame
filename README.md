@@ -1,1 +1,1 @@
-TheFifteenPuzzleGame with bfs, dfs, astar algorithms
+TheFifteenPuzzleGame with bfs, dfs, astar algorithms.

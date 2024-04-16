@@ -32,12 +32,9 @@ def manhattan_distance(board, positiveBoard):
             for k, number in enumerate(positiveRow):
                 if number == i+1:
                     positivePosition.append((j, k))
-    print(position)
-    print(positivePosition)
     for i in range(0, len(position)):
             distance = manhattan_distance_help_function(position[i], positivePosition[i])
             polesDictionary.append(distance)
-    print(polesDictionary)
     for i in range(0, 15):
         suma += polesDictionary[i]
     return suma
