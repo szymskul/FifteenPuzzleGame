@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import os
+import matplotlib.ticker as ticker
+
 
 import numpy as np
 def createPlotOfStatsOverall(numberOfLineToAdd):
@@ -9,21 +11,21 @@ def createPlotOfStatsOverall(numberOfLineToAdd):
     countDfs = [0,0,0,0,0,0,0]
     countBfs = [0,0,0,0,0,0,0]
     countAstar = [0, 0, 0, 0, 0, 0, 0]
-    directoryToStats = "siuuu"
+    directoryToStats = "solvedStats"
     for fileName in os.listdir(directoryToStats):
         filePath = os.path.join(directoryToStats, fileName)
         with open(filePath, 'r') as file:
             lines = file.readlines()
             parts = fileName.split('_')
             if numberOfLineToAdd <= len(lines):
-                if(parts[3] == "sStar"):
-                    countAstar[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                if(parts[3] == "astr"):
+                    countAstar[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsAstar[int(parts[1]) - 1] += 1
-                elif(parts[3] == "Bfs"):
-                    countBfs[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                elif(parts[3] == "bfs"):
+                    countBfs[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsBfs[int(parts[1]) - 1] += 1
                 elif(parts[3] == "Dfs"):
-                    countDfs[int(parts[1]) - 1] += int(lines[numberOfLineToAdd])
+                    countDfs[int(parts[1]) - 1] += float(lines[numberOfLineToAdd])
                     numberOfCountsDfs[int(parts[1]) - 1] += 1
             else:
                 return "Podana linia nie istnieje w pliku."
@@ -40,7 +42,8 @@ def createPlotOfStatsOverall(numberOfLineToAdd):
         dzielnik2 = numberOfCountsAstar[i]
         if(dzielnik2 != 0):
             countAstar[i] = zmienna2 / dzielnik2
-
+    print(countBfs)
+    print(countAstar)
     return countBfs, countDfs, countAstar
 def createPlotOfStatsAstar(numberOfLineToAdd):
     numberOfCountsHamm = [0,0,0,0,0,0,0]
@@ -183,21 +186,21 @@ def genPlotsOverall(lista1, lista2, lista3):
     plt.grid(False)
     plt.show()
 def genPlotsAstar(lista1, lista2):
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(14, 8))
     bar_width = 0.35
     indeksy = range(1, len(lista1) + 1)
     plt.bar(indeksy, lista1, bar_width, label='Manhattan', color='blue')
     plt.bar([i + bar_width for i in indeksy], lista2, bar_width, label='Hamming', color='green')
-    plt.title("A*",fontsize=14)
+    plt.title("A*",fontsize=24)
     plt.xticks([i + bar_width/2 for i in indeksy], indeksy)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.legend()
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.legend(fontsize=17)
     plt.grid(False)
     plt.show()
 
 def genPlotsBfs(*lists, title):
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(14, 8))
     bar_width = 0.1
     num_lists = len(lists)
     indeksy = range(len(lists[0]))
@@ -205,27 +208,27 @@ def genPlotsBfs(*lists, title):
     label = ['RDUL', 'RDLU', 'DRUL', 'DRLU', 'LUDR', 'LURD', 'ULDR', 'ULRD']
     for i, lista in enumerate(lists):
         plt.bar([j + i * bar_width for j in indeksy], lista, bar_width, label=label[i], color=colors[i])
-    plt.title('BFS', fontsize=14)
-    plt.xlabel('Głębokość', fontsize=12)
+    plt.title('BFS', fontsize=24)
+    plt.xlabel('Głębokość', fontsize=23)
     if title == 0:
-        plt.ylabel('Średnia długość drogi rozwiązania', fontsize=12)
+        plt.ylabel('Średnia długość drogi rozwiązania', fontsize=23)
+        plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f'))
     if title == 1:
-        plt.yticks(np.linspace(0, 1500, num=6), fontsize=12)  # Generuje równomierne wartości od 10 do 1000
-        plt.ylim(0, 1500)
-        plt.ylabel('Średnia liczba stanów odwiedzonych', fontsize=12)
+        plt.yscale('log')
+        plt.ylabel('Średnia liczba stanów odwiedzonych', fontsize=23)
     if title == 2:
-        plt.yticks(np.linspace(0, 500, num=6), fontsize=12)  # Generuje równomierne wartości od 10 do 1000
-        plt.ylim(0, 500)
-        plt.ylabel('Średnia liczba stanów przetworzonych', fontsize=12)
+        plt.yscale('log')
+        plt.ylabel('Średnia liczba stanów przetworzonych', fontsize=23)
     if title == 3:
-        plt.ylabel('Średnia maksymalna głębokość rekursji', fontsize=12)
+        plt.ylabel('Średnia maksymalna głębokość rekursji', fontsize=23)
+        plt.gca().yaxis.set_major_formatter(ticker.FormatStrFormatter('%.1f'))
     if title == 4:
-        plt.yticks([0,8], fontsize=12)
-        plt.ylabel('Średni czas procesu obliczeniowego (ms)',fontsize=12)
+        plt.yscale('log')
+        plt.ylabel('Średni czas procesu obliczeniowego (ms)',fontsize=23)
     plt.xticks([j + (num_lists - 1) * bar_width / 2 for j in indeksy], [j + 1 for j in indeksy])
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.legend()
+    plt.xticks(fontsize=20)
+    plt.yticks(fontsize=20)
+    plt.legend(fontsize=17)
     plt.grid(False)
     plt.show()
 
