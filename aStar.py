@@ -6,8 +6,8 @@ from moveFunctions import moveFunction
 from moveFunctions import checkMovePossibility
 
 def manhattan_distance_help_function(position, positivePosition):
-    x = abs(position[0] - positivePosition[0])
-    y = abs(position[1] - positivePosition[1])
+    x = position[0] - positivePosition[0]
+    y = position[1] - positivePosition[1]
     return abs(x) + abs(y)
 def humming_metric(board, positiveBoard):
     humming = 0
@@ -17,30 +17,23 @@ def humming_metric(board, positiveBoard):
                 if(board[i][j] != positiveBoard[i][j]):
                     humming += 1
     return humming
-def manhattan_distance(board, positiveBoard):
-    polesDictionary = []
-    position = []
-    positivePosition = []
+def manhattan_distance(board, positivePosition):
     suma = 0
-    for i in range(0, 15):
-
-        for j, row in enumerate(board):
-            for k, number in enumerate(row):
-                if number == i+1:
-                    position.append((j, k))
-        for j, positiveRow in enumerate(positiveBoard):
-            for k, number in enumerate(positiveRow):
-                if number == i+1:
-                    positivePosition.append((j, k))
-    for i in range(0, len(position)):
-            distance = manhattan_distance_help_function(position[i], positivePosition[i])
-            polesDictionary.append(distance)
-    for i in range(0, 15):
-        suma += polesDictionary[i]
+    for j, row in enumerate(board):
+        for k, number in enumerate(row):
+            distance = 0
+            if(board[j][k] != 0):
+                distance = manhattan_distance_help_function((j,k), positivePosition[int(board[j][k]) - 1])
+            suma += distance
     return suma
 
 def aStar(start_board, target_board, type):
     start_time = time.time()
+    positivePosition = []
+    for i in range(1, 16):
+        row = (i - 1) // 4
+        col = (i - 1) % 4
+        positivePosition.append((row, col))
     testedPositions = set()
     queueAstar = PriorityQueue()
     queueAstar.put((0, [start_board, "", 0]))
@@ -64,7 +57,7 @@ def aStar(start_board, target_board, type):
                     continue
                 moves_count_temp = moves_count + 1
                 if type == "mnh":
-                    cost = manhattan_distance(current_board, target_board) + moves_count_temp
+                    cost = manhattan_distance(current_board, positivePosition) + moves_count_temp
                 elif type == "hamm":
                     cost = humming_metric(current_board, target_board) + moves_count_temp
                 else:

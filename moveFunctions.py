@@ -43,3 +43,27 @@ def moveFunction(move, board):
                 board[position[0] + 1][position[1]] = board[position[0]][position[1]]
                 board[position[0]][position[1]] = change
     return board
+
+
+def checkingOppositeMove(move, last_move):
+    if move == "R" and last_move != "L":
+        return True
+    if move == "L" and last_move != "R":
+        return True
+    if move == "U" and last_move != "D":
+        return True
+    if move == "D" and last_move != "U":
+        return True
+    return False
+
+def returningOppositeMove(move):
+    if move == "R":
+        return "L"
+    if move == "L":
+        return "R"
+    if move == "D":
+        return "U"
+    if move == "U":
+        return "D"
+
+

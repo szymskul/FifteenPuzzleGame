@@ -1,26 +1,12 @@
 import ioFunctions
 import globalVariables
+import moveFunctions
 from bfs_algorithm import bfs_algorithm
 from dfs_algorithm import dfs_algorithm
 from aStar import aStar
 import sys
 
-def resetAllValues():
-    globalVariables.sizeOfBoard = []
-    globalVariables.dane = []
-    globalVariables.target_board = []
-    globalVariables.path = ""
-    globalVariables.reached_depth = 0
-    globalVariables.depth = 20
-    globalVariables.proceed = True
-    globalVariables.queue = []
-    globalVariables.order = ""
-    globalVariables.proceededPositions = 0
-    globalVariables.testedPositions = 0
-    globalVariables.spentTime = 0.0
-
 def mainFunction(algorithmType, order, fileToRead, fileToWriteSolution, fileToWriteDetailsOfSolution):
-    resetAllValues()
     ioFunctions.readFile(fileToRead)
     if algorithmType == "bfs":
         bfs_algorithm(globalVariables.dane, globalVariables.target_board, order)
