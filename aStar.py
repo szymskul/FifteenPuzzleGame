@@ -40,6 +40,7 @@ def aStar(start_board, target_board, type):
     max_depth = 0
     while not queueAstar.empty():
         current_board, path, moves_count = queueAstar.get()[1]
+        globalVariables.zero_position = None
         globalVariables.proceededPositions += 1
         if current_board == target_board:
             globalVariables.path = path
@@ -48,7 +49,9 @@ def aStar(start_board, target_board, type):
             globalVariables.spentTime = float((end_time - start_time) * 1000)
             return current_board
         testedPositions.add(tuple(map(tuple, current_board)))
+        zero = globalVariables.zero_position
         for move in "UDRL":
+            globalVariables.zero_position = zero
             if checkMovePossibility(move, current_board):
                 globalVariables.testedPositions += 1
                 temp_board = [row[:] for row in current_board]

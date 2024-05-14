@@ -18,6 +18,7 @@ def bfs_algorithm(start_board, target_board, order):
     testedPositions = set()
     testedPositions.add(tuple(map(tuple, start_board)))
     while queue:
+        globalVariables.zero_position = None
         current_state = queue.popleft()
         globalVariables.proceededPositions += 1
         current_board = current_state.board
@@ -25,7 +26,7 @@ def bfs_algorithm(start_board, target_board, order):
         if current_board == target_board:
             path = []
             while current_state.parent is not None:
-                path.append(current_state.move)
+                path.append(current_state.last_move)
                 current_state = current_state.parent
             path.reverse()
             globalVariables.reached_depth = len(path)
@@ -35,6 +36,7 @@ def bfs_algorithm(start_board, target_board, order):
             end_time = time.time()
             globalVariables.spentTime = float((end_time - start_time) * 1000)
             return current_board
+        zero = globalVariables.zero_position
         for move in order:
             new_board = [row[:] for row in current_board]
             if moveFunctions.checkMovePossibility(move, new_board) and moveFunctions.checkingOppositeMove(move, last_move):
@@ -44,3 +46,4 @@ def bfs_algorithm(start_board, target_board, order):
                     new_state = State(new_board, current_state, move)
                     queue.append(new_state)
                     testedPositions.add(tuple(map(tuple, new_board)))
+                globalVariables.zero_position = zero

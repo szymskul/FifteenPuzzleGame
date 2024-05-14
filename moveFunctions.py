@@ -1,48 +1,46 @@
+import globalVariables
 def checkMovePossibility(move, board):
-    zero_positions = []
-    for i, row in enumerate(board):
-        for j, number in enumerate(row):
-            if number == 0:
-                zero_positions.append((i, j))
-    for position in zero_positions:
-        if (move == "L"):
-            if (position[1] != 0):
-                return True
-        if (move == "R"):
-            if (position[1] != 3):
-                return True
-        if (move == "U"):
-            if (position[0] != 0):
-                return True
-        if (move == "D"):
-            if (position[0] != 3):
-                return True
+    if globalVariables.zero_position is None:
+        for i, row in enumerate(board):
+            for j, number in enumerate(row):
+                if number == 0:
+                    globalVariables.zero_position = [i,j]
+    if (move == "L"):
+        if (globalVariables.zero_position[1] != 0):
+            return True
+    if (move == "R"):
+        if (globalVariables.zero_position[1] != 3):
+            return True
+    if (move == "U"):
+        if (globalVariables.zero_position[0] != 0):
+            return True
+    if (move == "D"):
+        if (globalVariables.zero_position[0] != 3):
+            return True
     return False
 
 def moveFunction(move, board):
-    zero_positions = []
-    for i, row in enumerate(board):
-        for j, number in enumerate(row):
-            if number == 0:
-                zero_positions.append((i, j))
-    for position in zero_positions:
         if(move == "L"):
-                change = board[position[0]][position[1]-1]
-                board[position[0]][position[1]-1] = board[position[0]][position[1]]
-                board[position[0]][position[1]] = change
+                change = board[globalVariables.zero_position[0]][globalVariables.zero_position[1]-1]
+                board[globalVariables.zero_position[0]][globalVariables.zero_position[1]-1] = board[globalVariables.zero_position[0]][globalVariables.zero_position[1]]
+                board[globalVariables.zero_position[0]][globalVariables.zero_position[1]] = change
+                globalVariables.zero_position[1] -= 1
         if(move == "R"):
-                change = board[position[0]][position[1] + 1]
-                board[position[0]][position[1] + 1] = board[position[0]][position[1]]
-                board[position[0]][position[1]] = change
+                change = board[globalVariables.zero_position[0]][globalVariables.zero_position[1] + 1]
+                board[globalVariables.zero_position[0]][globalVariables.zero_position[1] + 1] = board[globalVariables.zero_position[0]][globalVariables.zero_position[1]]
+                board[globalVariables.zero_position[0]][globalVariables.zero_position[1]] = change
+                globalVariables.zero_position[1] += 1
         if(move == "U"):
-                change = board[position[0] - 1][position[1]]
-                board[position[0] - 1][position[1]] = board[position[0]][position[1]]
-                board[position[0]][position[1]] = change
+                change = board[globalVariables.zero_position[0] - 1][globalVariables.zero_position[1]]
+                board[globalVariables.zero_position[0] - 1][globalVariables.zero_position[1]] = board[globalVariables.zero_position[0]][globalVariables.zero_position[1]]
+                board[globalVariables.zero_position[0]][globalVariables.zero_position[1]] = change
+                globalVariables.zero_position[0] -= 1
         if(move == "D"):
-                change = board[position[0] + 1][position[1]]
-                board[position[0] + 1][position[1]] = board[position[0]][position[1]]
-                board[position[0]][position[1]] = change
-    return board
+                change = board[globalVariables.zero_position[0] + 1][globalVariables.zero_position[1]]
+                board[globalVariables.zero_position[0] + 1][globalVariables.zero_position[1]] = board[globalVariables.zero_position[0]][globalVariables.zero_position[1]]
+                board[globalVariables.zero_position[0]][globalVariables.zero_position[1]] = change
+                globalVariables.zero_position[0] += 1
+        return board
 
 
 def checkingOppositeMove(move, last_move):
